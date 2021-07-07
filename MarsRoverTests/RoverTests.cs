@@ -44,13 +44,7 @@ namespace MarsRoverTests
         [TestMethod]
         public void RespondsCorrectlyToModeChangeCommand()
         {
-            Command command = new Command { "MOVE",25,"NORMAL" };
             
-            
-            
-            Message message = new Message("Hello", command);
-            Rover test_rover = new Rover(222);
-            test_rover.RecieveCommand(message);
         }
     }
 }
