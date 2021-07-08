@@ -44,7 +44,60 @@ namespace MarsRoverTests
         [TestMethod]
         public void RespondsCorrectlyToModeChangeCommand()
         {
-            
+            Rover test_rover = new Rover(250);
+            Command cmdOne = new Command("MODE",25,"LOW_POWER");
+            Command[] cmdArry = new Command[]
+                {
+                cmdOne
+                };
+            Message msg = new Message("MODE", cmdArry);
+            Rover.RecieveCommand(msg, test_rover);
+            Assert.AreNotEqual("NORMAL", test_rover.Mode);
         }
+        
+        
+        
+        //this test uses the newly created constructor to start at LOW_POWER, then attempts to move the rover
+        [TestMethod]
+        public void DoesNotMoveInLowPower()
+        {
+            Rover test_rover = new Rover("LOW_POWER", 75, 100);
+            Command cmd = new Command("MOVE", 0);
+            Command[] cmdArry = new Command[]
+                {
+                cmd
+                };
+            Message msg = new Message("MOVE",cmdArry);
+            
+            try
+            {
+                Rover.RecieveCommand(msg, test_rover);
+            }
+            catch (SystemException ex)
+            {
+                Assert.AreEqual("In LOW_POWER mode. Try again later", ex.InnerException);
+            }
+        }
+
+
+
+
+        [TestMethod]
+        public void PositionChangesFromMoveCommand()
+        {
+            Rover test_rover = new Rover("NORMAL", 100, 100);
+            Command cmd = new Command("MOVE", 25, "NORMAL");
+            Command[] cmdArry = new Command[]
+            {
+            cmd
+            };
+            Message msg = new Message("MOVE", cmdArry);
+            Rover.RecieveCommand(msg, test_rover);
+            Assert.AreEqual(25, test_rover.Position);
+        }
+    
+    
+    
+    
     }
 }

@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Ling;
 namespace MarsRover
 {
     public class Rover
@@ -36,6 +35,15 @@ namespace MarsRover
         }
 
 
+        //creates new constructor allowing setting of position, mode, and power. Used in test 12 to shorten code length
+        public Rover(String tentMode, double tentPosition, double tentWatts)
+        {
+            GeneratorWatts = tentWatts >= 0 ? tentWatts : throw new Exception("Can't be less than 0");
+            Position = tentPosition;
+            Mode = tentMode;
+        }
+        
+        
         //creates new method to accept and execute a command. this will be tested in tests 11, 12, and 13.
         //I'll begin by creating a method which accepts a message as an argument. then it will assign the values
         //starting with mode. if the mode != assigned to "LOW-POWER" and the watts>0, it will then move. Prevents 
@@ -43,9 +51,9 @@ namespace MarsRover
 
 
 
-        public static void RecieveCommand(Message message)
+        public static void RecieveCommand(Message message, Rover test_rover)
         {
-            Rover arbRover = new Rover(0);
+            
             Command[] commandArray = message.Commands;
             string tentativeMode;
             string tentativeCommandType;
@@ -62,35 +70,35 @@ namespace MarsRover
                 //invalid command path. then we move to the mode change path. finally we branch down the move path
 
                 //invalid command path    
-            if ((tentativeCommandType != "MOVE") || (tentativeCommandType != "MODE_CHANGE"))
-                {
-                    throw new Exception("Invalid Command.");
-                }
+            //if ((tentativeCommandType != "MOVE") && (tentativeCommandType != "MODE_CHANGE"))
+              //  {
+                //    throw new Exception("Invalid Command.");
+                //}
 
                 //mode change path    
-            else if (tentativeCommandType == "MODE")
+            if (tentativeCommandType == "MODE")
                 {
-                    arbRover.Mode = arbRover.Mode == "LOW-POWER" ? "NORMAL" : "LOW-POWER";
+                    test_rover.Mode = test_rover.Mode == "LOW-POWER" ? "NORMAL" : "LOW-POWER";
                     break;
                 }
 
                 //move path if watts are less <=0    
-            else if (arbRover.GeneratorWatts <= 0)
+            else if (test_rover.GeneratorWatts <= 0)
                 {
                     throw new Exception("Insufficient Power");
                 }
             
             
             //move branch if in low-power mode    
-            else if (arbRover.Mode == "LOW-POWER")
+            else if (test_rover.Mode == "LOW_POWER")
                 {
-                    throw new Exception ("In LOW-POWER mode. Try again later");            
+                    throw new Exception("In LOW_POWER mode. Try again later");
                 }
 
             //move branch where it actually moves
-            else if ((arbRover.GeneratorWatts > 0) && (arbRover.Mode != "LOW-POWER"))
+            else if ((test_rover.GeneratorWatts > 0) && (test_rover.Mode != "LOW-POWER"))
                 {
-                    arbRover.Position = tentativePosition;
+                    test_rover.Position = tentativePosition;
                 }
             }
 
