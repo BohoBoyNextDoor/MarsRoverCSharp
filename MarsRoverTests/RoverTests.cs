@@ -73,9 +73,9 @@ namespace MarsRoverTests
             {
                 Rover.RecieveCommand(msg, test_rover);
             }
-            catch (SystemException ex)
+            catch (Exception ex)
             {
-                Assert.AreEqual("In LOW_POWER mode. Try again later", ex.InnerException);
+                Assert.AreEqual("In LOW_POWER mode. Try again later",ex.Message);
             }
         }
 
